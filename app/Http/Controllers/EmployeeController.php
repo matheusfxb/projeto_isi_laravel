@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Employee;
+use Illuminate\Support\Facades\Redirect;
 
 class EmployeeController extends Controller
 {
@@ -19,7 +20,8 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        return view('index');
+        return Employee::all();
+        return view('index')->with('employees', $employees);
     }
 
     public function add(){
@@ -53,14 +55,16 @@ class EmployeeController extends Controller
             'idade' => 'required',
             'funcao' => 'required'
         ]);
-
+/*
         $employee = new Employee;
-        $employee->name = $request->input('nome');
+        $employee->nome = $request->input('nome');
         $employee->idade = $request->input('idade');
-        $employee->funcao = $request->input('funcao');
+        $employee->funcao = $request->input('funcao');*/
+        $data = $request->all();
+        $employee = Employee::create($data);
         $employee->save();
 
-        return Redirect::to('index');
+        return response()->json($employee);
     }
 
     /**
@@ -108,6 +112,6 @@ class EmployeeController extends Controller
         $employee = Employee::find($id);
         $employee->delete();
         
-        return Redirect::to('index');
+        return redirect('/')->with('success', 'Employee removed');
     }
 }
