@@ -96,10 +96,15 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        public function update(Employee $employee, Request $request){
-            $data = $request->all();
-            $employee = $employee->update($data);
-            return response()->json($employee);
+        public function update(Request $request, $id){
+            $employee = Employee::findOrFail($id);
+            $employee->nome = $request->nome;
+            $employee->idade = $request->idade;
+            $employee->funcao = $request->funcao;
+
+            $employee->save();
+
+            return $employee;
         }
 
     /**
@@ -108,9 +113,24 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
+    }
+
+    /*public function update(Employee $employee, Request $request){
+            $data = $request->all();
+            $employee = $employee->update($data);
+            return response()->json($employee);
+    }*/
+
+
+   /* public function destroy(Employee $employee)
+    {
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
         $employee->delete();
         return response()->json(['success']);
-    }
+    }*/
 }
