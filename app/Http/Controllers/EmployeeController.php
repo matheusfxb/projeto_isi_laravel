@@ -73,10 +73,9 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    public function show(Employee $employee){
+		return response()->json($employee);
+	}
 
     /**
      * Show the form for editing the specified resource.
@@ -96,10 +95,12 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
+        public function update(Employee $employee, Request $request){
+            $data = $request->all();
+            $employee = $employee->update($data);
+            return response()->json($employee);
+        }
 
     /**
      * Remove the specified resource from storage.
